@@ -1,18 +1,10 @@
-from fastapi import Depends, HTTPException, APIRouter
 from sqlalchemy.orm import Session
-from pydantic import BaseModel
+from fastapi import Depends, HTTPException
 
 from api.models import User
-from api.utils import hash_password, verify_password, get_db, error_messages, success_messages
+from api.utils import hash_password, verify_password, get_db, error_messages, success_messages, UserCreate
 
-router = APIRouter()
-
-class UserCreate(BaseModel):
-    username: str
-    password: str
-
-@router.post("/register")
-def register(user: UserCreate, db: Session = Depends(get_db)):
+def register_user(user: UserCreate, db: Session = Depends(get_db)):
     existing_user = db.query(User).filter(User.username == user.username).first()
     if existing_user:
         raise HTTPException(status_code=400, detail=error_messages["already_exist"])
@@ -26,9 +18,9 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
 
     return {"message": success_messages["user_registered"]}
 
-@router.post("/login")
-def login(user: UserCreate, db: Session = Depends(get_db)):
+def login_user(user: UserCreate, db: Session = Depends(get_db)):
     user_data = db.query(User).filter(User.username == user.username).first()
+
     if not user_data:
         raise HTTPException(status_code=400, detail=error_messages["wrong_user"])
 

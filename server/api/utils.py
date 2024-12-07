@@ -1,6 +1,7 @@
 from bcrypt import hashpw, gensalt, checkpw
 
 from api.database import SessionLocal
+from pydantic import BaseModel
 
 def hash_password(password: str) -> str:
     return hashpw(password.encode("utf-8"), gensalt()).decode("utf-8")
@@ -26,3 +27,7 @@ success_messages = {
     "user_registered": "User registration was successful.",
     "login": "Login successful."
 }
+
+class UserCreate(BaseModel):
+    username: str
+    password: str
