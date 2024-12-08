@@ -2,7 +2,8 @@ from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException
 
 from api.models import User
-from api.utils import hash_password, verify_password, get_db, error_messages, success_messages, UserCreate
+from api.utils import hash_password, verify_password, error_messages, success_messages, UserCreate
+from api.database import get_db
 
 def register_user(user: UserCreate, db: Session = Depends(get_db)):
     existing_user = db.query(User).filter(User.username == user.username).first()

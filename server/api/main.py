@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.routers.auth import auth_router
-from api.telegram import telegram_router
+from api.routers.telegram import telegram_router
 from api.database import init_db
 
 app = FastAPI()
